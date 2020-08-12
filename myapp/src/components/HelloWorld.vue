@@ -2,12 +2,12 @@
   <div class="hello">
     <h1>{{ msg }}</h1>
     <p>
-      For a guide and recipes on how to configure / customize this project,<br>
+      a guide and recipes on how to configure / customize this project,<br>
       check out the
       <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
     </p>
     <ul id="example-1">
-  <li v-for="item in items" :key="item.message">
+  <li v-for="(item,index) in items" :key="index">
     {{ item.message }}
   </li>
 </ul>
@@ -15,23 +15,20 @@
 </template>
 
 <script>
-import Vue from 'vue'
+//import Vue from 'vue'
 export default {
   name: 'HelloWorld',
   props: {
     msg: String
   },
-  
-}
-new Vue({
-  el: '#example-1',
-  data: {
-    items: [
+  data:() => {
+    return {items:[ 
       { message: 'Foo' },
       { message: 'Bar' }
-    ]
+      ]
   }
-})
+  }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
