@@ -1,61 +1,84 @@
 <template>
-  <div id="app">
-    <header>
-      <span>PCR Management System</span>
-    </header>
-    <main>
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="to Your Vue.js App"/>
-    </main>
-  </div>
+  <v-app>
+    <v-app-bar
+      app
+      color="primary"
+      dark
+    >
+      <div class="d-flex align-center">
+        <v-img
+          alt="Vuetify Logo"
+          class="shrink mr-2"
+          contain
+          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
+          transition="scale-transition"
+          width="40"
+        />
+
+        <v-img
+          alt="Vuetify Name"
+          class="shrink mt-1 hidden-sm-and-down"
+          contain
+          min-width="100"
+          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
+          width="100"
+        />
+        
+      </div>
+      <div id="nav">
+      <v-btn >
+          <router-link to="/">Home</router-link>
+      </v-btn>
+      <v-btn >
+        <router-link to="/clan">Clan</router-link>
+      </v-btn>
+      <v-btn >
+        <router-link to="/about">About</router-link>
+      </v-btn>
+      </div>
+      <v-spacer></v-spacer>
+      
+      <v-btn
+        href="https://github.com/vuetifyjs/vuetify/releases/latest"
+        target="_blank"
+        text
+      >
+        <span class="mr-2">Github</span>
+        <v-icon>mdi-open-in-new</v-icon>
+      </v-btn>
+    </v-app-bar>
+
+    <v-main>
+    <router-view/>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  }
-}
 
-
+  data: () => ({
+    //
+  }),
+};
 </script>
-
 <style>
-body {
-  margin: 0;
+
+#nav {
+  padding: 30px;
 }
 
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+#nav a {
+  font-weight: bold;
   color: #2c3e50;
 }
 
-main {
-  text-align: center;
-  margin-top: 40px;
+#nav a.router-link-exact-active {
+  color: #66ccff;
 }
 
-header {
-  margin: 0;
-  height: 56px;
-  padding: 0 16px 0 24px;
-  background-color: #35495E;
-  color: #ffffff;
-}
-
-header span {
-  display: block;
-  position: relative;
-  font-size: 20px;
-  line-height: 1;
-  letter-spacing: .02em;
-  font-weight: 400;
-  box-sizing: border-box;
-  padding-top: 16px;
-}
+a {  text-decoration: none;}
 </style>
