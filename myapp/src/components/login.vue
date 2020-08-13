@@ -1,6 +1,7 @@
 <template>
  <div class="text-center">
-<v-card >
+<v-card class="mx-auto"
+            max-width="500">
   <v-col>
   
   <v-form>

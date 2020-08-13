@@ -63,9 +63,27 @@ app.post('/clan/newclan', (req, res) => {
     var inserts = [clanname];
     sql = mysql.pool.query(sql, inserts, function(error, results, fields){
         if(error){
-            //TODO: send error messages to frontend as the following doesn't work
+            //TODO: add clan master a the ame time!
 
             res.write(JSON.stringify(error));
+            res.end();
+            
+            console.log(error)
+        }
+        else res.status(200).json({status:"ok"})
+    });
+});
+
+app.post('/clan/removeclan', (req, res) => {
+    console.log(req.body);
+    var clanId = req.body.clanId;
+    var sql = "DELETE FROM Clans WHERE clanId = ?"
+    var inserts = [clanId];
+    sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+        if(error){
+
+            res.write(JSON.stringify(error));
+            res.status(400);
             res.end();
 
             console.log(error)

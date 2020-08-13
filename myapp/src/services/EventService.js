@@ -33,4 +33,8 @@ export default {
     return await axios.post('http://localhost:2333/clan/newclan', item);
   },
 
+  async _removeclan(item) {
+    return await axios.post('http://localhost:2333/clan/removeclan', item);
+  },
+
 }

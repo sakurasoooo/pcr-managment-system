@@ -1,7 +1,8 @@
 <template>
   <div class="home">
   <p>WELCOME, {{nickname}} </p>
-  <v-card>
+  <v-card class="mx-auto"
+            max-width="500">
    <div class="text-center">
 <v-container >
   <v-col>

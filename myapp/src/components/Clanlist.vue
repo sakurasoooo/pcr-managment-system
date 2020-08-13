@@ -41,7 +41,7 @@
       </v-list-item>
             <v-card-actions>
          <v-btn class ="color= green" text>JOIN !</v-btn>
-         <v-btn class ="color= red" text>DELETE</v-btn>
+         <v-btn class ="color= red" text @click="removeclan(item.clanId)">DELETE</v-btn>
          </v-card-actions>
             </v-card>
           </v-list-item>
@@ -74,11 +74,17 @@ import EventService from '@/services/EventService.js';
       },
       async addnewclan(){
         await EventService._newclan({clanname:this.clanname});
-        alert("SEND "+ this.clanname);
+        //alert("SEND "+ this.clanname);
 
         await this.getAllclanData();
-      }
+      },
+      async removeclan(id){
+        await EventService._removeclan({clanId:id});
+        //alert("Remove "+ id);
+
+        await this.getAllclanData();
     }
 
+  }
   }
 </script>
