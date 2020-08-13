@@ -24,5 +24,13 @@ export default {
   async _login(username) {
     let res = await axios.get("http://localhost:2333/login/"+username);
     return res.data;
-  }
+  },
+  async _getallclans() {
+    let res = await axios.get("http://localhost:2333/clanlist");
+    return res.data;
+  },
+  async _newclan(item) {
+    return await axios.post('http://localhost:2333/clan/newclan', item);
+  },
+
 }

@@ -33,19 +33,47 @@ app.get('/events/:id', (req, res) => {
     res.send(event);
   });
 
-  app.get('/login/:username', (req, res) => {
-   
-    const username = req.params.username;
-    console.log("login: "+username);
-    mysql.pool.query(`SELECT * from Users WHERE userName = "${username}"`, function(error, results, fields){
+app.get('/login/:username', (req, res) => {
+
+const username = req.params.username;
+console.log("login: "+username);
+mysql.pool.query(`SELECT * from Users WHERE userName = "${username}"`, function(error, results, fields){
+    if(error){
+        console,log(JSON.stringify(error));
+    }
+    console.log("length: "+results.length);
+    console.log("result: "+JSON.stringify(results));
+    res.send(results)
+});
+});
+
+app.get('/clanlist', (req, res) => {
+    mysql.pool.query("SELECT * from Clans", function(error, results, fields){
         if(error){
             console,log(JSON.stringify(error));
         }
-        console.log("length: "+results.length);
         console.log("result: "+JSON.stringify(results));
         res.send(results)
     });
-  });
+});
+app.post('/clan/newclan', (req, res) => {
+    console.log(req.body);
+    var clanname = req.body.clanname;
+    var sql = "INSERT INTO `Clans` (`clanName`) VALUES (?)"
+    var inserts = [clanname];
+    sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+        if(error){
+            //TODO: send error messages to frontend as the following doesn't work
+
+            res.write(JSON.stringify(error));
+            res.end();
+
+            console.log(error)
+        }
+        else res.status(200).json({status:"ok"})
+    });
+});
+
 
 app.post('/signup', (req, res) => {
     console.log(req.body);
