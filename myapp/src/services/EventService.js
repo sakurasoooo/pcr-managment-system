@@ -44,6 +44,9 @@ export default {
   async _joinclan(item) {
     return await axios.post('http://localhost:2333/clan/joinclan', item);
   },
+  async _quitclan(item) {
+    return await axios.post('http://localhost:2333/clan/quit', item);
+  },
 
   async _getclanmembers(item) {
     let res = await axios.post('http://localhost:2333/clan/clanmembers', item);

@@ -140,8 +140,27 @@ app.post('/clan/joinclan', (req, res) => {
     console.log(req.body);
     var userName = req.body.userName
     var clanId = req.body.clanId;
-    var authority = 0;
+    //var authority = 0;
     var sql = "INSERT INTO Clan_members  (`userId`,`clanId`, `authority`) SELECT userId ,?,0 FROM Users WHERE userName = ?";
+    var inserts = [clanId,userName];
+    sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+        if(error){
+
+            res.write(JSON.stringify(error));
+            res.status(400);
+            res.end();
+
+            console.log(error)
+        }
+        else res.status(200).json({status:"ok"})
+    });
+});
+
+app.post('/clan/quit', (req, res) => {
+    console.log(req.body);
+    var userName = req.body.userName
+    var clanId = req.body.clanId;
+    var sql = "DELETE FROM Clan_members WHERE clanId = ? AND userId IN (SELECT userId FROM Users WHERE userName = ?)";
     var inserts = [clanId,userName];
     sql = mysql.pool.query(sql, inserts, function(error, results, fields){
         if(error){
@@ -199,11 +218,3 @@ app.post('/update/user', (req, res) => {
 // start the server
 app.listen(port, () => console.log(`Listening on port ${port}`))
 
-let events = [
-    {
-        name:'roger',
-    },
-    {
-        name:'nax'
-    }
-]

@@ -121,7 +121,7 @@ import Store from '@/store/store.vue';
             this.$set(this, "members", event);
             }).bind(this)
         );
-        alert(JSON.stringify(this.members));
+        //alert(JSON.stringify(this.members));
         this.dialog = true
     },
     checkloginstatus(){
@@ -174,7 +174,25 @@ import Store from '@/store/store.vue';
 
         await this.getAllclanData();
         }else{
-            alert("You already in");
+            alert("You are already in");
+        }
+    },
+    async leftclan(id){
+        if(!this.checkloginstatus()) return;
+        await EventService._isinclan({userName:Store.username,clanId:id})
+        .then(
+            (event => {
+            this.$set(this, "isinclan", event.result);
+            }).bind(this)
+        );
+        //alert(JSON.stringify(this.isinclan));
+        if(this.isinclan){
+        await EventService._quitclan({userName:Store.username,clanId:id});
+        alert("QUIT SUCCEED");
+
+        await this.getAllclanData();
+        }else{
+            alert("You are not a member of this clan");
         }
     },
 
