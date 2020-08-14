@@ -14,7 +14,7 @@
           </v-col>
         </v-card>
   <v-list shaped>
-        <v-subheader>REPORTS</v-subheader>
+        <v-subheader>CLANS</v-subheader>
         
           <v-list-item
             v-for="(item, i) in results"
@@ -40,29 +40,98 @@
         </v-list-item-avatar>
       </v-list-item>
             <v-card-actions>
-         <v-btn class ="color= green" text>JOIN !</v-btn>
+         <v-btn class ="color= green" text @click="joinclan(item.clanId)">JOIN !</v-btn>
          <v-btn class ="color= red" text @click="removeclan(item.clanId)">DELETE</v-btn>
+         <v-btn class ="color= purple" text @click="leftclan(item.clanId)">QUIT</v-btn>
+
+    <v-spacer> </v-spacer>
+    <v-btn
+            color="blue lighten-2"
+            dark
+            @click="open(item.clanId)"
+          >
+            VIEW
+          </v-btn>
+      
+
+
+
          </v-card-actions>
             </v-card>
           </v-list-item>
 
       </v-list>
+      <v-dialog
+        v-model="dialog"
+        width="500"
+      >
+
+        <v-card>
+          <v-card-title class="headline grey lighten-2">
+            Members
+          </v-card-title>
+
+        <v-list-item
+            v-for="(mem, j) in members"
+            :key="j"
+          >
+          <v-card-text>
+          {{mem.userName}}
+           </v-card-text>
+         </v-list-item>
+  
+          <v-divider></v-divider>
+  
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="primary"
+              text
+              @click="dialog = false"
+            >
+              Close
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
   </v-container>
 </template>
 
 <script>
 import EventService from '@/services/EventService.js';
+import Store from '@/store/store.vue';
   export default {
     name: 'Clanlist',
 
     data: () => ({
+        dialog:false,
         clanname:null,
-        results:[]
+        results:[],
+        members:[],
+        isinclan:false,
     }),
     created() {
     this.getAllclanData(); // NEW - cal l getEventData() when the instance is created
   },
   methods:{
+     async open(id){
+        await EventService._getclanmembers({clanId:id})
+        .then(
+            (event => {
+            this.$set(this, "members", event);
+            }).bind(this)
+        );
+        alert(JSON.stringify(this.members));
+        this.dialog = true
+    },
+    checkloginstatus(){
+        if(Store.status){
+            return true;
+        }else{
+            alert("Please login");
+            return false;
+        }
+    },
     async getAllclanData() {
       // Use the eventService to call the getEventSingle() method
         EventService._getallclans()
@@ -73,17 +142,41 @@ import EventService from '@/services/EventService.js';
         );
       },
       async addnewclan(){
+          if(!this.checkloginstatus()) return;
+        if(this.clanname != null){
         await EventService._newclan({clanname:this.clanname});
         //alert("SEND "+ this.clanname);
 
         await this.getAllclanData();
+        }else{
+            alert("Enter your clan name")
+        }
       },
       async removeclan(id){
+        if(!this.checkloginstatus()) return;
         await EventService._removeclan({clanId:id});
         //alert("Remove "+ id);
 
         await this.getAllclanData();
-    }
+    },
+    async joinclan(id){
+        if(!this.checkloginstatus()) return;
+        await EventService._isinclan({userName:Store.username,clanId:id})
+        .then(
+            (event => {
+            this.$set(this, "isinclan", event.result);
+            }).bind(this)
+        );
+        //alert(JSON.stringify(this.isinclan));
+        if(!this.isinclan){
+        await EventService._joinclan({userName:Store.username,clanId:id});
+        alert("JOIN SUCCEED");
+
+        await this.getAllclanData();
+        }else{
+            alert("You already in");
+        }
+    },
 
   }
   }

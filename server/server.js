@@ -92,6 +92,70 @@ app.post('/clan/removeclan', (req, res) => {
     });
 });
 
+app.post('/clan/isinclan', (req, res) => {
+    console.log(req.body);
+    var userName = req.body.userName
+    var clanId = req.body.clanId;
+    var sql = "SELECT * FROM Users a INNER JOIN Clan_members b ON a.userId = b.userId WHERE a.userName = ? AND b.clanId = ?";
+    var inserts = [userName,clanId];
+    sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+        if(error){
+
+            res.write(JSON.stringify(error));
+            res.status(400);
+            res.end();
+
+            console.log(error)
+        }
+        if(results.length!=0){
+            res.send({result:true});
+        }
+        else res.send({result:false});
+    });
+});
+
+app.post('/clan/clanmembers', (req, res) => {
+    console.log(req.body);
+    //var userName = req.body.userName
+    var clanId = req.body.clanId;
+    var sql = "SELECT userName FROM Users a INNER JOIN Clan_members b ON a.userId = b.userId WHERE b.clanId = ?";
+    var inserts = [clanId];
+    sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+        if(error){
+
+            res.write(JSON.stringify(error));
+            res.status(400);
+            res.end();
+
+            console.log(error)
+        }
+        else{
+            console.log(JSON.stringify(results))
+            res.send(results);
+        }
+    });
+});
+
+app.post('/clan/joinclan', (req, res) => {
+    console.log(req.body);
+    var userName = req.body.userName
+    var clanId = req.body.clanId;
+    var authority = 0;
+    var sql = "INSERT INTO Clan_members  (`userId`,`clanId`, `authority`) SELECT userId ,?,0 FROM Users WHERE userName = ?";
+    var inserts = [clanId,userName];
+    sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+        if(error){
+
+            res.write(JSON.stringify(error));
+            res.status(400);
+            res.end();
+
+            console.log(error)
+        }
+        else res.status(200).json({status:"ok"})
+    });
+});
+
 
 app.post('/signup', (req, res) => {
     console.log(req.body);

@@ -36,5 +36,18 @@ export default {
   async _removeclan(item) {
     return await axios.post('http://localhost:2333/clan/removeclan', item);
   },
+  async _isinclan(item){
+     let res = await axios.post('http://localhost:2333/clan/isinclan', item);
+     return res.data
+  },
+
+  async _joinclan(item) {
+    return await axios.post('http://localhost:2333/clan/joinclan', item);
+  },
+
+  async _getclanmembers(item) {
+    let res = await axios.post('http://localhost:2333/clan/clanmembers', item);
+    return res.data
+  },
 
 }
