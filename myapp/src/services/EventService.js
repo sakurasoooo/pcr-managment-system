@@ -32,11 +32,11 @@ export default {
     return res.data;
   },
   async _newclan(item) {
-    return await axios.post(url+'clan/newclan', item);
+    return await axios.post(url+'/clan/newclan', item);
   },
 
   async _removeclan(item) {
-    return await axios.post(url+'clan/removeclan', item);
+    return await axios.post(url+'/clan/removeclan', item);
   },
   async _isinclan(item){
      let res = await axios.post(url+'/clan/isinclan', item);
